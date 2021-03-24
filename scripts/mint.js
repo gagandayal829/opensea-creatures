@@ -9,9 +9,7 @@ const NETWORK = process.env.NETWORK;
 const NUM_CREATURES = 1;
 
 if (!PRIVATE_KEY || !OWNER_ADDRESS || !NETWORK) {
-  console.error(
-    "Please set a private key, owner, network, and contract address, see .env.sample"
-  );
+  console.error("Please set a private key, owner, network, and contract address, see .env.sample");
   return;
 }
 
@@ -58,20 +56,18 @@ async function main() {
   const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
   if (NFT_CONTRACT_ADDRESS) {
-    const nftContract = new ethers.Contract(
-      NFT_CONTRACT_ADDRESS,
-      NFT_ABI,
-      wallet
-    );
+    const nftContract = new ethers.Contract(NFT_CONTRACT_ADDRESS, NFT_ABI, wallet);
     // Creatures issued directly to the owner.
     let mints = [];
 
     for (var i = 0; i < NUM_CREATURES; i++) {
-      mints.push(nftContract.mintTo(OWNER_ADDRESS,{gasLimit:10000000}));
+      mints.push(nftContract.mintTo(OWNER_ADDRESS));
     }
 
     Promise.all(mints)
-      .then((result) => console.log("Minted Creature. Transaction:", result))
+      .then( (result) => {
+        console.log("Minted Creature. Transaction:", result)
+      })
       .catch((err) => console.log(err));
   }
 }
